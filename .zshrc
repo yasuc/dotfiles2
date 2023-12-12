@@ -207,6 +207,7 @@ WSL*)
     [ -f $DOTFILES/.zshrc.linux ] && source $DOTFILES/.zshrc.linux
     ;;
 Linux*)
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
     [ -f $DOTFILES/.zshrc.linux ] && source $DOTFILES/.zshrc.linux
     ;;
 Cygwin*)
@@ -290,7 +291,6 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 export HOMEBREW_GITHUB_API_TOKEN=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
 
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 eval "$(oh-my-posh init zsh --config $(brew --prefix oh-my-posh)/themes/night-owl.omp.json)"
 
 
