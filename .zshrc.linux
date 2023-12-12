@@ -1,0 +1,20 @@
+# Terminal Colorの設定
+export CLICOLOR=1
+export LSCOLORS=ExFxCxDxBxegedabagacad
+
+# man path
+MANPATH=/usr/local/man:$MANPATH
+export MANPATH
+INFOPATH=/usr/local/info:$INFOPATH
+export INFOPATH
+
+# Maven2
+export MAVEN_HOME=/usr/local/apache-maven-2.2.1
+#export PATH=$MAVEN_HOME/bin:$PATH
+export MAVEN_OPTS=-Xmx1024M
+
+#rvm
+if [[ -s $HOME/.rvm/scripts/rvm ]] ; then source $HOME/.rvm/scripts/rvm ; fi
+
+export SCALA_HOME=/usr/local/share/scala-2.11.7
+export PATH=$PATH:$SCALA_HOME/bin:$HOME/.cargo/bin

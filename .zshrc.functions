@@ -1,0 +1,262 @@
+#####################################################################
+# functions
+#####################################################################
+
+function getos() {
+    unameOut="$(uname -a)"
+    case "${unameOut}" in
+        Linux*[Mm]icrosoft*)     machine=WSL;;
+        Linux*)     machine=Linux;;
+        Darwin*)    machine=Mac;;
+        CYGWIN*)    machine=Cygwin;;
+        MINGW*)     machine=MinGw;;
+        MSYS*)      machine=Msys;;
+        *)          machine="UNKNOWN:${unameOut}"
+    esac
+    export OSTYPE2=${machine}
+}
+getos
+
+#function chpwd() { ls }
+function history-all { history -E 1 }
+function ssh_screen() {
+screen -t ssh $1
+}
+
+if [ $TERM = "screen" ]; then
+    alias ssh ssh_screen
+    precmd() {
+        screen -X title $(basename `echo $PWD | sed -e "s/ /_/g"`)
+    }
+    preexec() {
+        screen -X title `echo $1 | cut -d " " -f 1`
+    }
+fi
+
+function gmail() {
+    local cnt
+    cnt=`wget -q --no-check-certificate https://mail.google.com/mail/feed/atom -O - | sed -n -e "/fullcount/ {s/<[^>]*>//g;p}"`
+    if [ 0 != $cnt ]; then
+        echo "You Got a Mail!($cnt)"
+    else
+        echo "orz..."
+    fi
+}
+
+function google() {
+    local str opt
+    if [ $# != 0 ]; then
+        for i in $*; do
+            str="$str+$i"
+        done
+        str=`echo $str | sed 's/^\+//'`
+        opt='search?num=50&hl=ja&lr=lang_ja'
+        opt="${opt}&q=${str}"
+    fi
+    w3m http://www.google.co.jp/$opt
+}
+
+# set proxy
+function getproxyreg() {
+    case ${OSTYPE2} in
+        Linux*)
+            if type "dconf" > /dev/null 2>&1; then
+                proxy_host=`dconf read /system/proxy/http/host`
+                proxy_port=`dconf read /system/proxy/http/port`
+                no_proxy=`dconf read /system/proxy/ignore-hosts`
+                no_proxy=${no_proxy//[\[\]\' ]/}
+                PROXYSERVER=${proxy_host//\'/}:${proxy_port}
+                PROXYENABLE="0x1"
+            else
+                PROXYSERVER=""
+                PROXYENABLE=""
+            fi
+            ;;
+        Mac*)
+            proxy_host=`networksetup -getwebproxy Wi-Fi|grep Server:| cut -d" " -f2`
+            proxy_port=`networksetup -getwebproxy Wi-Fi|grep Port:| cut -d" " -f2`
+            proxy_enable=`networksetup -getwebproxy Wi-Fi|grep "^Enabled:"| cut -d" " -f2`
+            if [ ${proxy_enable} = "Yes" ]; then
+                PROXYSERVER=${proxy_host//\'/}:${proxy_port}
+                PROXYENABLE="0x1"
+            else
+                PROXYSERVER=""
+                PROXYENABLE="0x0"
+            fi
+            ;;
+        WSL*)
+            PROXYENABLE=`/mnt/c/Windows/System32/reg.exe query "HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings" | grep ProxyEnable | perl -lane 'print @F[2]'`
+            PROXYSERVER=`/mnt/c/Windows/System32/reg.exe query "HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings" | grep ProxyServer | perl -lane 'print @F[2]'`
+            ;;
+
+        MinGw*|Msys*|Cygwin*)
+            PROXYENABLE=`reg.exe query "HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings" | grep ProxyEnable | perl -lane 'print @F[2]'`
+            PROXYSERVER=`reg.exe query "HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings" | grep ProxyServer | perl -lane 'print @F[2]'`
+            ;;
+    esac
+    PROXYSERVER=${PROXYSERVER#http://}
+}
+
+function setproxy() {
+    getproxyreg
+    s=$1
+    if [ -z "$s" ]; then
+
+        s=${PROXYSERVER}
+    fi
+    if [ ${PROXYENABLE} = "0x1" ]; then
+        export HTTP_PROXY=http://$s/
+        export HTTPS_PROXY=http://$s/
+        export FTP_PROXY=http://$s/
+        export http_proxy=http://$s/
+        export https_proxy=http://$s/
+        export ftp_proxy=http://$s/
+        export PROXYFTP=http://$s/
+        export PROXYHTTP=http://$s/
+    else
+        noproxy 
+    fi
+}
+
+function proxy() {
+    setproxy
+}
+
+function sproxy() {
+    setproxy "proxy.okinawa-ct.ac.jp:8080"
+}
+
+function cproxy() {
+    setproxy "cproxy.okinawa-ct.ac.jp:8080"
+}
+
+function noproxy() {
+    unset HTTP_PROXY
+    unset HTTPS_PROXY
+    unset FTP_PROXY
+    unset http_proxy
+    unset https_proxy
+    unset ftp_proxy
+    unset PROXYFTP
+    unset PROXYHTTP
+}
+
+#function chpwd() {
+#    ls_abbrev
+#}
+
+function ls_abbrev() {
+    # -a : Do not ignore entries starting with ..
+    # -C : Force multi-column output.
+    # -F : Append indicator (one of */=>@|) to entries.
+    local cmd_ls='ls'
+    local -a opt_ls
+    opt_ls=('-aCF' '--color=always')
+    case "${OSTYPE}" in
+        freebsd*|darwin*)
+            if type gls > /dev/null 2>&1; then
+                cmd_ls='gls'
+            else
+                # -G : Enable colorized output.
+                opt_ls=('-aCFG')
+            fi
+            ;;
+    esac
+
+    local ls_result
+    ls_result=$(CLICOLOR_FORCE=1 COLUMNS=$COLUMNS command $cmd_ls ${opt_ls[@]} | sed $'/^\e\[[0-9;]*m$/d')
+
+    local ls_lines=$(echo "$ls_result" | wc -l | tr -d ' ')
+
+    if [ $ls_lines -gt 10 ]; then
+        echo "$ls_result" | head -n 5
+        echo '...'
+        echo "$ls_result" | tail -n 5
+        echo "$(command ls -1 -A | wc -l | tr -d ' ') files exist"
+    else
+        echo "$ls_result"
+    fi
+}
+
+function do_enter() {
+    if [ -n "$BUFFER" ]; then
+        zle accept-line
+        return 0
+    fi
+    echo
+    #ls
+    # ↓おすすめ
+    ls_abbrev
+    if [ "$(git rev-parse --is-inside-work-tree 2> /dev/null)" = 'true' ]; then
+        echo
+        echo -e "\e[0;33m--- git status ---\e[0m"
+        git status -sb
+    fi
+    zle reset-prompt
+    return 0
+}
+zle -N do_enter
+bindkey '^m' do_enter
+
+#function zle-line-init zle-keymap-select {
+#  case $KEYMAP in
+#    vicmd)
+#    PROMPT="${RESET}${GREEN}${WINDOW:+"[$WINDOW]"}${RESET}%{$fg_bold[cyan]%}${USER}@%m ${RESET}${WHITE}$ ${RESET}"
+#    ;;
+#    main|viins)
+#    PROMPT="${RESET}${GREEN}${WINDOW:+"[$WINDOW]"}${RESET}%{$fg_bold[blue]%}${USER}@%m ${RESET}${WHITE}$ ${RESE#T}"
+#    ;;
+#  esac
+#  zle reset-prompt
+#}
+
+function cwaf() {
+    LANG=C command ./waf "$@" 2>&1 | sed -e "s@[Ee]rror:.*@$e_RED&$e_normal@g" -e "s@cannot¥sfind.*@$e_RED&$e_normal@g" -e "s@[Ww]arning:.*@$e_BLUE&$e_normal@g"
+}
+
+function rmf(){
+   for file in $*
+   do
+      __rm_single_file $file
+   done
+}
+
+function __rm_single_file(){
+       if ! [ -d ~/.Trash/ ]
+       then
+               command /bin/mkdir ~/.Trash
+       fi
+
+       if ! [ $# -eq 1 ]
+       then
+               echo "__rm_single_file: 1 argument required but $# passed."
+               exit
+       fi
+
+       if [ -e $1 ]
+       then
+               BASENAME=`basename $1`
+               NAME=$BASENAME
+               COUNT=0
+               while [ -e ~/.Trash/$NAME ]
+               do
+                       COUNT=$(($COUNT+1))
+                       NAME="$BASENAME.$COUNT"
+               done
+
+               command /bin/mv $1 ~/.Trash/$NAME
+       else
+               echo "No such file or directory: $file"
+       fi
+}
+
+function ghq-fzf() {
+local src=$(ghq list | fzf --preview "ls --color -lahF --time-style=+%Y-%m-%d\ %H:%M:%S $(ghq root)/{} | tail -n+4 | awk '{print \$6\"  \"\$7\"  \"\$8}'")
+  if [ -n "$src" ]; then
+    BUFFER="cd $(ghq root)/$src"
+    zle accept-line
+  fi
+  zle -R -c
+}
+zle -N ghq-fzf
+bindkey '^g' ghq-fzf

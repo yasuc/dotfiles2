@@ -1,0 +1,83 @@
+export PATH=/opt/homebrew/bin:$PATH
+export BREW_ROOT=$(brew --prefix)
+export RBENV_ROOT=$(brew --prefix rbenv) 
+
+export PATH=$BREW_ROOT/sbin:$PATH
+export PATH=$(brew --prefix coreutils)/libexec/gnubin:/usr/texbin:$PATH
+export PATH=$BREW_ROOT/opt/llvm/bin:$PATH
+export PATH=$RBENV_ROOT/bin:$PATH
+
+eval "$(rbenv init -)"
+
+export LDFLAGS="-L/opt/homebrew/opt/llvm/lib"
+export CPPFLAGS="-I/opt/homebrew/opt/llvm/include"
+
+export OPENSSL_ROOT=$(brew --prefix openssl)
+export PATH="$OPENSSL_ROOT/bin:$PATH"
+export LDFLAGS="$LDFLAGS -L$OPENSSL_ROOT/lib"
+export CPPFLAGS="$CPPFLAGS -I$OPENSSL_ROOT/include"
+export PKG_CONFIG_PATH="$OPENSSL_ROOT/lib/pkgconfig"
+export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$OPENSSL_ROOT"
+
+export LIBXML2_ROOT=$(brew --prefix libxml2)
+export PATH="$LIBXML2_ROOT/bin:$PATH"
+export LDFLAGS="$LDFLAGS -L$LIBXML2_ROOT/lib"
+export CPPFLAGS="$CPPFLAGS -I$LIBXML2_ROOT/include"
+export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$LIBXML2_ROOT/lib/pkgconfig"
+
+export LIBXSLT_ROOT=$(brew --prefix libxslt)
+export PATH="$LIBXSLT_ROOT/bin:$PATH"
+export LDFLAGS="$LDFLAGS -L$LIBXSLT_ROOT/lib"
+export CPPFLAGS="$CPPFLAGS -I$LIBXSLT_ROOT/include"
+export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$LIBXSLT_ROOT/lib/pkgconfig"
+
+export LIBICONV_ROOT=$(brew --prefix libiconv)
+export PATH="$LIBICONV_ROOT/bin:$PATH"
+export LDFLAGS="-L$LIBICONV_ROOT/lib $LDFLAGS"
+export CPPFLAGS="-I$LIBICONV_ROOT/include $CPPFLAGS"
+
+export LIBFFI_ROOT=$(brew --prefix libffi)
+export PATH="$LIBFFI_ROOT/bin:$PATH"
+export LDFLAGS="-L$LIBFFI_ROOT/lib $LDFLAGS"
+export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$LIBFFI_ROOT/lib/pkgconfig"
+
+export PATH=$HOME/.nodebrew/current/bin:$PATH
+
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH=$PATH:~/Development/flutter/bin
+export NVM_DIR="$HOME/.nvm"
+
+#[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && . "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+
+# osx alias
+alias pbc='pbcopy'
+alias sed='gsed'
+alias awk='gawk'
+alias objdump='gobjdump'
+alias strings='gstrings'
+alias python='python3'
+
+# Terminal Colorの設定
+export CLICOLOR=1
+export LSCOLORS=ExFxCxDxBxegedabagacad
+
+# man path
+MANPATH=/usr/local/man:$MANPATH
+export MANPATH
+INFOPATH=/usr/local/info:$INFOPATH
+export INFOPATH
+
+export PYTHONPATH=/usr/local/lib/python:$PYTHONPATH
+
+export REFE_DATA_DIR=/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/share/refe
+## node.js
+export NODE_PATH=/usr/local/lib/node_modules
+
+export SDKROOT="$(xcrun --sdk macosx --show-sdk-path)"
+
+if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+
+if [ -e /opt/homebrew/share/zsh/site-functions ]; then
+    fpath=(/opt/homebrew/share/zsh/site-functions $fpath)
+fi
+
