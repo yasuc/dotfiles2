@@ -61,15 +61,21 @@ function getproxyreg() {
     case ${OSTYPE2} in
         Linux*)
             if type "dconf" > /dev/null 2>&1; then
-                proxy_host=`dconf read /system/proxy/http/host`
-                proxy_port=`dconf read /system/proxy/http/port`
-                no_proxy=`dconf read /system/proxy/ignore-hosts`
-                no_proxy=${no_proxy//[\[\]\' ]/}
-                PROXYSERVER=${proxy_host//\'/}:${proxy_port}
-                PROXYENABLE="0x1"
+                phost=`dconf read /system/proxy/http/host`
+                if [ -n "$phost" ]; then
+                  proxy_host=`dconf read /system/proxy/http/host`
+                  proxy_port=`dconf read /system/proxy/http/port`
+                  no_proxy=`dconf read /system/proxy/ignore-hosts`
+                  no_proxy=${no_proxy//[\[\]\' ]/}
+                  PROXYSERVER=${proxy_host//\'/}:${proxy_port}
+                  PROXYENABLE="0x1"
+                else
+                  PROXYSERVER=""
+                  PROXYENABLE="0x0"
+                fi
             else
                 PROXYSERVER=""
-                PROXYENABLE=""
+                PROXYENABLE="0x0"
             fi
             ;;
         Mac*)
@@ -101,7 +107,6 @@ function setproxy() {
     getproxyreg
     s=$1
     if [ -z "$s" ]; then
-
         s=${PROXYSERVER}
     fi
     if [ ${PROXYENABLE} = "0x1" ]; then

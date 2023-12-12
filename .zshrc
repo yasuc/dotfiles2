@@ -11,7 +11,11 @@ bindkey -e
 
 umask 022
 
-export DOTFILES=~/dotfiles2
+if [ -d ~/dotfiles2 ]; then
+  export DOTFILES=~/dotfiles2
+else
+  export DOTFILES=~/ghq/github.com/yasuc/dotfiles2
+fi
 
 ## setopt設定
 #
