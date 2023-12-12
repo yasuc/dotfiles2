@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DOT_FILES=(.byobu .dir_colors .gdbinit .gitconfig .gitignore .inputrc .p10k.zsh .screenrc .tmux.conf .zsh .zshrc)
+DOT_FILES=(.dir_colors .gdbinit .gitconfig .gitignore .inputrc .zsh .zshrc)
 
 for file in ${DOT_FILES[@]}; do
 	rm $HOME/$file
