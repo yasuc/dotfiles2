@@ -1,8 +1,3 @@
-
-#MysqlでFKの一覧を調べるワンライナー
-mysql -u resolver --password=resolver resolver < TableList.sql |sed 's/\\n/&\
-/g'| grep 'CONSTRAINT .* FOREIGN KEY'|cut -d ' ' -f4 > FKList
-
 # ファイル名を置換するワンライナー
 ls *.png | cut  -d ' ' -f14,15,16,17 |perl -nle '$o=$_;$_=~s/\s/_/i;$_=lc($_);$_=~s/^/icon_/i;rename($o, $_);'
 
