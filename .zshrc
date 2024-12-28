@@ -379,9 +379,11 @@ function y() {
 }
 
 if [ -n "$NVIM" ]; then
-    eval "$(oh-my-posh init zsh --config $(brew --prefix oh-my-posh)/themes/json.omp.json)"
+   eval "$(starship init zsh)"
+    # eval "$(oh-my-posh init zsh --config $(brew --prefix oh-my-posh)/themes/kali.omp.json)"
 else
-    eval "$(oh-my-posh init zsh --config $(brew --prefix oh-my-posh)/themes/night-owl.omp.json)"
+   eval "$(starship init zsh)"
+    # eval "$(oh-my-posh init zsh --config $(brew --prefix oh-my-posh)/themes/night-owl.omp.json)"
 fi
 
 # function update_prompt_based_on_columns() {

@@ -81,4 +81,5 @@ alias cdiff='colordiff -u'
 alias json='eval "$(oh-my-posh init zsh --config $(brew --prefix oh-my-posh)/themes/json.omp.json)"'
 alias kali='eval "$(oh-my-posh init zsh --config $(brew --prefix oh-my-posh)/themes/kali.omp.json)"'
 alias night-owl='eval "$(oh-my-posh init zsh --config $(brew --prefix oh-my-posh)/themes/night-owl.omp.json)"'
+alias star='eval "$(starship init zsh)"'
 
