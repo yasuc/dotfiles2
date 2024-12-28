@@ -31,9 +31,9 @@ alias 'gr'='grep --color=auto -RUIn'
 alias 'grep'='grep -s'
 
 #make
-alias 'm'='make'
-alias 'mn'='make native-code'
-alias 'mc'='make clean'
+# alias 'm'='make'
+# alias 'mn'='make native-code'
+# alias 'mc'='make clean'
 
 # git
 alias g='git'
@@ -77,3 +77,8 @@ alias li='exa -a -l --icons --git -h -g'
 alias lt='exa -a -l --icons --tree --git -h -g'
 
 alias cdiff='colordiff -u'
+
+alias json='eval "$(oh-my-posh init zsh --config $(brew --prefix oh-my-posh)/themes/json.omp.json)"'
+alias kali='eval "$(oh-my-posh init zsh --config $(brew --prefix oh-my-posh)/themes/kali.omp.json)"'
+alias night-owl='eval "$(oh-my-posh init zsh --config $(brew --prefix oh-my-posh)/themes/night-owl.omp.json)"'
+

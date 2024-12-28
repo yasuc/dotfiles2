@@ -101,7 +101,7 @@ e_BLUE=`echo -e "¥033[1;36m"`
 
 ## zsh editor
 #
-autoload zed
+#autoload zed
 
 ## Prediction configuration
 #
@@ -174,7 +174,7 @@ dumb)
     echo "Welcome Emacs Shell"
     ;;
 esac
-export EDITOR=vi
+export EDITOR=nvim
 export PATH=/usr/bin:/bin:/sbin:/usr/sbin:$PATH
 export PATH=/usr/local/bin:/usr/local/sbin:$PATH
 export PATH=$PATH:$HOME/local/bin:$HOME/bin
@@ -291,10 +291,129 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 export HOMEBREW_GITHUB_API_TOKEN=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
 
-eval "$(oh-my-posh init zsh --config $(brew --prefix oh-my-posh)/themes/night-owl.omp.json)"
-
+eval "$(sheldon source)"
 
 autoload -U compinit
 compinit -u
 
-eval "$(sheldon source)"
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
+        . "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
+    else
+        export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+
+# bun completions
+[ -s "/Users/yasuc/.bun/_bun" ] && source "/Users/yasuc/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+export FZF_CTRL_T_OPTS="+s -e"
+export FZF_CTRL_R_OPTS="+s -e"
+export FZF_ALT_C_OPTS="+s -e"
+
+export HOMEBREW_NO_AUTO_UPDATE=1
+
+eval "$(zoxide init zsh)"
+
+
+. /opt/homebrew/opt/asdf/libexec/asdf.sh
+
+alias nvim-lazy="NVIM_APPNAME=LazyVim nvim"
+alias nvim-kick="NVIM_APPNAME=kickstart nvim"
+alias nvim-chad="NVIM_APPNAME=NvChad nvim"
+alias nvim-astro="NVIM_APPNAME=AstroNvim nvim"
+
+export NVIM_APPNAME=LazyVim
+
+function nvims() {
+  items=("default" "kickstart" "LazyVim" "NvChad" "AstroNvim")
+  config=$(printf "%s\n" "${items[@]}" | fzf --prompt=" Neovim Config >> " --height=~50% --layout=reverse --border --exit-0)
+  if [[ -z $config ]]; then
+    echo "Nothing selected"
+    return 0
+  elif [[ $config == "default" ]]; then
+    config=""
+  fi
+  NVIM_APPNAME=$config nvim $@
+}
+
+
+# pnpm
+export PNPM_HOME="/Users/yasuc/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
+
+# Added by Windsurf
+export PATH="/Users/yasuc/.codeium/windsurf/bin:$PATH"
+
+# Added by Windsurf
+export PATH="/Users/yasuc/.codeium/windsurf/bin:$PATH"
+
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		builtin cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}
+
+if [ -n "$NVIM" ]; then
+    eval "$(oh-my-posh init zsh --config $(brew --prefix oh-my-posh)/themes/json.omp.json)"
+else
+    eval "$(oh-my-posh init zsh --config $(brew --prefix oh-my-posh)/themes/night-owl.omp.json)"
+fi
+
+# function update_prompt_based_on_columns() {
+#     if [[ $COLUMNS -lt 100 ]]; then
+#       eval "$(oh-my-posh init zsh --config $(brew --prefix oh-my-posh)/themes/json.omp.json)"
+#     else
+#       eval "$(oh-my-posh init zsh --config $(brew --prefix oh-my-posh)/themes/night-owl.omp.json)"
+#     fi
+# }
+#
+# function on_terminal_resize() {
+#     # ターミナル幅の更新
+#     update_prompt_based_on_columns
+#     # プロンプトを即座にリセット
+#     zle reset-prompt
+# }
+#
+# # TRAPWINCHでリサイズ時に関数を呼び出す
+# TRAPWINCH() {
+#     on_terminal_resize
+# }
+#
+# # 初回プロンプトの設定
+# update_prompt_based_on_columns
+less_with_unbuffer () {
+    unbuffer "$@" |& less -SR
+}
+alias ul=less_with_unbuffer
+
+# TMUXセッション内でのみ環境変数を設定
+if [[ -n $TMUX ]]; then
+  export FZF_TMUX=1
+  export FZF_TMUX_OPTS="-p 80%"
+fi
+

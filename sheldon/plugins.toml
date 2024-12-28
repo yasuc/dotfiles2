@@ -12,6 +12,7 @@
 
 shell = "zsh"
 
+
 [plugins]
 
 # For example:
@@ -19,14 +20,21 @@ shell = "zsh"
 # [plugins.base16]
 # github = "chriskempson/base16-shell"
 
+
 [plugins.zsh-autosuggestions]
 github = "zsh-users/zsh-autosuggestions"
 
 [plugins.zsh-syntax-highlighting]
 github = "zsh-users/zsh-syntax-highlighting"
 
+[plugins.zsh-completions]
+github = "zsh-users/zsh-completions"
+
 [plugins.zsh-256color]
 github = "chrissicool/zsh-256color"
 
 [plugins.zsh-async]
 github = "mafredri/zsh-async"
+
+#[plugins.enhancd]
+#github = "b4b4r07/enhancd"

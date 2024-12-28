@@ -6,6 +6,7 @@ export PATH=$BREW_ROOT/sbin:$PATH
 export PATH=$(brew --prefix coreutils)/libexec/gnubin:/usr/texbin:$PATH
 export PATH=$BREW_ROOT/opt/llvm/bin:$PATH
 export PATH=$RBENV_ROOT/bin:$PATH
+export PATH=$(brew --prefix bison)/bin:$PATH
 
 eval "$(rbenv init -)"
 
@@ -81,3 +82,4 @@ if [ -e /opt/homebrew/share/zsh/site-functions ]; then
     fpath=(/opt/homebrew/share/zsh/site-functions $fpath)
 fi
 
+bindkey "ç" fzf-cd-widget

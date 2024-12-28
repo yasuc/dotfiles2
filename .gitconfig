@@ -17,6 +17,7 @@
 	autocrlf = false
 	editor = vim
 	quotepath = false
+	excludesfile = /Users/yasuc/.gitignore_global
 [merge]
 	tool = vimdiff
 [alias]
@@ -109,7 +110,7 @@
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path = 
 [mergetool "sourcetree"]
-	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
 [init]
 	defaultBranch = main
@@ -119,3 +120,10 @@
 [diff "openxml"]
 	binary = true
 	textconv = ~/bin/unopenxml
+[gitflow "branch"]
+	master = main
+[pull]
+	rebase = false
+[pager]
+	log = false
+  diff = false
