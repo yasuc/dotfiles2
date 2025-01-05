@@ -83,3 +83,12 @@ alias kali='eval "$(oh-my-posh init zsh --config $(brew --prefix oh-my-posh)/the
 alias night-owl='eval "$(oh-my-posh init zsh --config $(brew --prefix oh-my-posh)/themes/night-owl.omp.json)"'
 alias star='eval "$(starship init zsh)"'
 
+alias gitchg='for dir in */; do ([ -d "$dir" ] && cd "$dir" && [ -d .git ] && git status --short | grep -q . && echo "$dir has changes"); done'
+
+alias bell='afplay /System/Library/Sounds/Hero.aiff'
+
+_notify-done() {
+  osascript -e 'display notification "Process is done!" with title "Terminal"'
+}
+alias notify-done=_notify-done
+
