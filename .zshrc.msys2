@@ -1,0 +1,44 @@
+# Terminal Colorの設定
+export CLICOLOR=1
+export LSCOLORS=ExFxCxDxBxegedabagacad
+
+export PATH=/mingw64/bin:/usr/local/bin:/usr/bin:/bin:/c/Windows/System32:/c/Windows:/c/Windows/System32/Wbem:/c/Windows/System32/WindowsPowerShell/v1.0/:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl
+
+# man path
+MANPATH=/usr/local/man:$MANPATH
+export MANPATH
+INFOPATH=/usr/local/info:$INFOPATH
+export INFOPATH
+
+# Java
+#export JAVA_HOME=/cygdrive/c/Program\ Files/Java/jdk1.8.0_74
+#export PATH=$JAVA_HOME/bin:$PATH
+
+# Maven2
+#export MAVEN_HOME=/usr/local/apache-maven-2.2.1
+#export PATH=$MAVEN_HOME/bin:$PATH
+#export MAVEN_OPTS=-Xmx1024M
+
+#rvm
+if [[ -s $HOME/.rvm/scripts/rvm ]] ; then source $HOME/.rvm/scripts/rvm ; fi
+
+#export PATH=$PATH:$HOME/.gem/ruby/1.8/bin
+#export PATH=/opt/firefox:$PATH
+
+#export SCALA_HOME=/usr/local/share/scala-2.11.7
+#export PATH=$PATH:$SCALA_HOME/bin
+
+# vim
+#alias vi='vim -X'
+#alias vim='vim -X'
+#Alias for cocot
+alias java="cocot java"
+alias javac="cocot javac"
+alias cmd="cocot cmd"
+alias ifconfig="cocot ipconfig"
+alias ping="cocot ping"
+alias arp="cocot arp"
+alias nslookup="cocot nslookup"
+alias traceroute="cocot tracert"
+alias route="cocot route"
+alias netstat="cocot netstat" 
