@@ -1,0 +1,53 @@
+#####################################################################
+# 開発ツールの PATH と初期化
+# (.zshrc の compinit より後に読み込む)
+#####################################################################
+
+## Go
+export GOBIN=~/go/bin
+path=($path $GOBIN)
+
+## rbenv
+path=($HOME/.rbenv/bin $path)
+(( $+commands[rbenv] )) && eval "$(rbenv init -)"
+
+## deno
+export DENO_INSTALL="$HOME/.deno"
+path=($DENO_INSTALL/bin $path)
+
+## fzf
+(( $+commands[fzf] )) && eval "$(fzf --zsh)"
+[ -f ~/fzf-git.sh/fzf-git.sh ] && source ~/fzf-git.sh/fzf-git.sh
+
+## nvm
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+## pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+path=($PYENV_ROOT/bin $path)
+if (( $+commands[pyenv] )); then
+    eval "$(pyenv init --path)"
+    eval "$(pyenv init -)"
+fi
+
+## bun
+export BUN_INSTALL="$HOME/.bun"
+path=($BUN_INSTALL/bin $path)
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+
+## asdf
+path=("${ASDF_DATA_DIR:-$HOME/.asdf}/shims" $path)
+
+## zoxide
+(( $+commands[zoxide] )) && eval "$(zoxide init zsh)"
+
+## thefuck
+if (( $+commands[thefuck] )); then
+    eval "$(thefuck --alias)"
+    eval "$(thefuck --alias fk)"
+fi
+
+## man 等の色付け
+[ -f ~/.LESS_TERMCAP ] && source ~/.LESS_TERMCAP

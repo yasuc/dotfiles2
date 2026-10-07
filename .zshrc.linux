@@ -8,16 +8,29 @@ export MANPATH
 INFOPATH=/usr/local/info:$INFOPATH
 export INFOPATH
 
+# WSL固有の設定
+if [[ $OSTYPE2 == WSL* ]]; then
+    alias start='/mnt/c/Windows/explorer.exe'
+    alias explorer='/mnt/c/Windows/explorer.exe'
+    #alias code='/mnt/c/Program\ Files/Microsoft\ VS\ Code/bin/code'
+    alias code='/mnt/c/Users/yasuc/Appdata/Local/Programs/Microsoft\ VS\ Code/bin/code'
+fi
+
 # Maven2
 export MAVEN_HOME=/usr/local/apache-maven-2.2.1
 #export PATH=$MAVEN_HOME/bin:$PATH
 export MAVEN_OPTS=-Xmx1024M
 
-#rvm
+# rvm
 if [[ -s $HOME/.rvm/scripts/rvm ]] ; then source $HOME/.rvm/scripts/rvm ; fi
 
+# Scala / cargo / linuxbrew
 export SCALA_HOME=/usr/local/share/scala-2.11.7
 export PATH=$PATH:$SCALA_HOME/bin:$HOME/.cargo/bin
 export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
 
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+# このマシン固有
+export PATH="/home/yasuc/anaconda3/bin:$PATH:/home/yasuc/.dotnet/tools"
+
+# opam
+[[ ! -r /home/yasuc/.opam/opam-init/init.zsh ]] || source /home/yasuc/.opam/opam-init/init.zsh > /dev/null 2> /dev/null

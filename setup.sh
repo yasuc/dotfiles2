@@ -7,7 +7,8 @@ for file in ${DOT_FILES[@]}; do
 	ln -s $PWD/$file $HOME/$file
 done
 
-CONFIG_DIRS=(nvim tmux sheldon)
+# CONFIG_DIRS=(nvim tmux sheldon)
+CONFIG_DIRS=(sheldon)
 
 for dir in ${CONFIG_DIRS[@]}; do
 	rm -rf $HOME/.config/$dir
